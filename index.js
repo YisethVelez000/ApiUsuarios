@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
+const cors = require('cors');
 require('dotenv').config()
 
 const app = express();
@@ -18,7 +19,6 @@ mongoose.connect(uri,
     .catch(e => console.log('error db:', e))
 
 // import routes
-
 const authRoutes = require('./routes/auth');
 const verifyToken = require('./routes/validate-token');
 
