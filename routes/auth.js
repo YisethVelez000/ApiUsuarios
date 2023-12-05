@@ -97,6 +97,7 @@ router.put('/editarUsuario/:id', async (req, res) => {
 //Eliminamos un usuario
 router.delete('/eliminarUsuario/:id', async (req, res) => {
     const user = await User.findByIdAndRemove(req.params.id);
+    
     res.json(user);
 });
 //Editamos un usuario
