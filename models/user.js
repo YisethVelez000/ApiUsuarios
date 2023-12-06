@@ -25,7 +25,10 @@ const userSchema = mongoose.Schema({
     rol:{
         type: String,
         required : true,
-        default : 'Cliente'
+    },
+    precioDolar:{
+        type: Number,
+        required : true,
     }
 })
 

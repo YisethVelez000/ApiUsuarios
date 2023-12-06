@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 
 // constraseña
@@ -12,7 +13,9 @@ const Joi = require('@hapi/joi');
 const schemaRegister = Joi.object({
     name: Joi.string().min(6).max(255).required(),
     email: Joi.string().min(6).max(255).required().email(),
-    password: Joi.string().min(6).max(1024).required()
+    password: Joi.string().min(6).max(1024).required(),
+    rol: Joi.string().required(),
+    precioDolar: Joi.number().required()
 })
 
 const schemaLogin = Joi.object({
@@ -41,7 +44,9 @@ router.post('/register', async (req, res) => {
     const user = new User({
         name: req.body.name,
         email: req.body.email,
-        password: password
+        password: password,
+        rol: req.body.rol,
+        precioDolar: req.body.precioDolar
     });
     try {
         const savedUser = await user.save();
@@ -83,23 +88,17 @@ router.get('/listarUsuario/:email', async (req, res) => {
     res.json(user);
 });
 
-//Editamos la contraseña del usuario
-router.put('/editarUsuario/:id', async (req, res) => {
-    const { error } = schemaLogin.validate(req.body);
-    if (error) return res.status(400).json({ error: error.details[0].message })
-    
-    const salt = await bcrypt.genSalt(10);
-    const password = await bcrypt.hash(req.body.password, salt);
-    const user = await User.findByIdAndUpdate(req.params.id, {password: password});
-    res.json(user);
+//Editamos un usuario por su correo electronico para editar todos sus datos
+router.put('/editarUsuario/:email', async (req, res) => {
+    const { name, email, password, rol, precioDolar } = req.body;
+    const newUser = { name, email, password, rol, precioDolar };
+    await User.findOneAndUpdate({email: req.params.email}, newUser);
+    res.json('Usuario actualizado');
 });
 
-//Eliminamos un usuario
-router.delete('/eliminarUsuario/:id', async (req, res) => {
-    const user = await User.findByIdAndRemove(req.params.id);
-    
-    res.json(user);
+//Eliminamos un usuario por su correo electronico
+router.delete('/eliminarUsuario/:email', async (req, res) => {
+    await User.findOneAndDelete({email: req.params.email});
+    res.json('Usuario eliminado');
 });
-//Editamos un usuario
-
 module.exports = router;
