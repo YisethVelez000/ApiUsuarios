@@ -26,6 +26,9 @@ const schemaLogin = Joi.object({
 //usamos cors para poder hacer peticiones desde el front
 router.use(cors());
 
+// Configura el body parser
+router.use(express.json()); 
+
 
 router.post('/register', async (req, res) => {
 
