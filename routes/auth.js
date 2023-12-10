@@ -9,6 +9,7 @@ const bcrypt = require('bcrypt');
 
 // validation
 const Joi = require('@hapi/joi');
+const bodyParser = require('body-parser');
 
 
 const schemaRegister = Joi.object({
@@ -27,7 +28,7 @@ const schemaLogin = Joi.object({
 router.use(cors());
 
 // Configura el body parser
-router.use(express.json()); 
+router.use(bodyParser.urlencoded({ extended: false })); 
 
 
 router.post('/register', async (req, res) => {
