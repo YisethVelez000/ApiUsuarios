@@ -25,10 +25,6 @@ const userSchema = mongoose.Schema({
     rol:{
         type: String,
         required : true,
-    },
-    precioDolar:{
-        type: Number,
-        required : true,
     }
 })
 
